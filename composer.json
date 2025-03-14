@@ -1,0 +1,26 @@
+{
+    "name": "engrshishir/larainitializer",
+    "description": "Larainitializer is a Laravel package designed to streamline the basic setup process for new projects. It provides essential configurations and tools to kickstart Laravel development quickly and efficiently.",
+    "type": "package",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Engrshishir\\Larainitializer\\": "src/"
+        }
+    },
+    "extra":{
+        "laravel":{
+            "providers":[
+                "Engrshishir\\Larainitializer\\LarainitializerServiceProvider"
+            ]
+        }
+    },
+    "authors": [
+        {
+            "name": "engrshishir",
+            "email": "shishir.cse.pstu@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
