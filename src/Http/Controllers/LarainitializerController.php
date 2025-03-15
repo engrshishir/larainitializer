@@ -21,6 +21,9 @@ class LarainitializerController extends BaseController
             case 'database':
                 return view('larainitializer::database');
                 break;
+            case 'sql':
+                return view('larainitializer::sql-download');
+                break;
         }
     }
 
@@ -33,17 +36,26 @@ class LarainitializerController extends BaseController
             ]);
             EnvWriter::setEnvValue('APP_NAME', $validated['app_name']);
             EnvWriter::setEnvValue('APP_LOCALE', $validated['app_locale']);
-            return redirect()->route('squartup.setup.form', ['email']);
+            return redirect()->route('squartup.setup.form', ['email'])->with('success', 'Basic Setup Successfull');
         } elseif ($request->step == 'email') {
             $validated = $request->validate([
+                'mail_mailer' => 'required',
+                'mail_host' => 'required',
+                'mail_port' => 'required',
+                'mail_encryption' => 'nullable',
                 'mail_username' => 'required|max:255',
                 'mail_password' => 'required',
                 'mail_from_address' => 'required'
             ]);
+            EnvWriter::setEnvValue('MAIL_MAILER', $validated['mail_mailer']);
+            EnvWriter::setEnvValue('MAIL_HOST', $validated['mail_host']);
+            EnvWriter::setEnvValue('MAIL_PORT', $validated['mail_port']);
+            EnvWriter::setEnvValue('MAIL_ENCRYPTION', $validated['mail_encryption']) ?? '';
             EnvWriter::setEnvValue('MAIL_USERNAME', $validated['mail_username']);
             EnvWriter::setEnvValue('MAIL_PASSWORD', $validated['mail_password']);
             EnvWriter::setEnvValue('MAIL_FROM_ADDRESS', $validated['mail_from_address']);
-            return redirect()->route('squartup.setup.form', ['database']);
+
+            return redirect()->route('squartup.setup.form', ['database'])->with('success', 'Email Setup Successfull');
         } elseif ($request->step == 'database') {
             if ($request->db_connection == 'mysql') {
                 $validated = $request->validate([
@@ -61,7 +73,8 @@ class LarainitializerController extends BaseController
                 EnvWriter::setEnvValue('DB_DATABASE', $validated['db_database']);
                 EnvWriter::setEnvValue('DB_USERNAME', $validated['db_username']);
                 EnvWriter::setEnvValue('DB_PASSWORD', $validated['db_password']);
-                return redirect()->back()->with('success', 'Sqlite database creaed');
+
+                return redirect('/')->with('success', 'MySQL database created successfully');
             } elseif ($request->db_connection == 'sqlite') {
                 EnvWriter::removeEnvValue('DB_HOST');
                 EnvWriter::removeEnvValue('DB_PORT');
@@ -69,7 +82,7 @@ class LarainitializerController extends BaseController
                 EnvWriter::removeEnvValue('DB_USERNAME');
                 EnvWriter::removeEnvValue('DB_PASSWORD');
                 EnvWriter::setEnvValue('DB_CONNECTION', 'sqlite');
-                return redirect()->back()->with('success', 'Sqlite database creaed');
+                return redirect('/')->with('success', 'MySQL database created successfully');
             }
         }
     }

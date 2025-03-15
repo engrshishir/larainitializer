@@ -5,7 +5,7 @@
 @section('content')
     @if (session('success') || session('error'))
         @include('larainitializer::partials.alert', [
-            'type' => session('success') ? 'success': 'danger',
+            'type' => session('success') ? 'success' : 'danger',
             'message' => session('success') ? session('success') : session('error'),
         ])
     @endif
@@ -40,42 +40,35 @@
                     error="{{ $errors->first('db_host') }}" />
 
                 <x-input label="DB Port" name="db_port" type="number" placeholder="Enter database port"
-                    value="{{ old('db_port') ?? (empty(getenv('db_port')) ? '3306' : getenv('db_port')) }}"
+                    value="{{ old('db_port') ?? (empty(getenv('DB_PORT')) ? '3306' : getenv('DB_PORT')) }}"
                     error="{{ $errors->first('db_port') }}" />
 
                 <x-input label="DB Username" name="db_username" type="text" placeholder="Enter database username"
-                    value="{{ old('db_username') ?? (empty(getenv('db_username')) ? 'root' : getenv('db_username')) }}"
+                    value="{{ old('db_username') ?? (empty(getenv('DB_DATABASE')) ? 'root' : getenv('DB_DATABASE')) }}"
                     error="{{ $errors->first('db_username') }}" />
 
                 <x-input label="DB Password" name="db_password" type="password" placeholder="Enter database password"
-                    value="{{ old('db_password') ?? (empty(getenv('db_password')) ? '' : getenv('db_password')) }}"
+                    value="{{ old('db_password') ?? (empty(getenv('DB_PASSWORD')) ? '' : getenv('DB_PASSWORD')) }}"
                     error="{{ $errors->first('db_password') }}" />
 
                 <x-input label="DB Database" name="db_database" type="text" placeholder="Enter database name"
-                    value="{{ old('db_database') ?? (empty(getenv('db_database')) ? '' : getenv('db_database')) }}"
+                    value="{{ old('db_database') ?? (empty(getenv('DB_DATABASE')) ? '' : getenv('DB_DATABASE')) }}"
                     error="{{ $errors->first('db_database') }}" />
             </div>
 
-            <a href="{{ route('squartup.setup.form', ['email']) }}" class="btn"
-                style="background-color: #7b48cd; color: white; width: 200px; float: left;">Email Setup</a>
-
-            <button type="submit" class="btn"
-                style="background-color: #7b48cd; color: white; width: 200px; float: right;">Next</button>
+            @include('larainitializer::partials.backbtn', [
+                'label' => 'Email Setup',
+                'route' => route('squartup.setup.form', ['email']),
+            ])
+            @include('larainitializer::partials.nextbtn',[
+                'label' => 'Submit'
+            ])
         </div>
     </form>
 @endsection
 
 @push('app-scripts')
     <script>
-        $(document).ready(function() {
-            $('.toast').toast({
-                delay: 5000
-            });
-            $('[data-dismiss="toast"]').click(function() {
-                $(this).closest('.toast').toast('hide');
-            });
-        });
-
         function toggleDatabaseFields() {
             const dbConnection = document.querySelector('input[name="db_connection"]:checked').value;
             const mysqlFields = document.querySelector('.mysql-fields');

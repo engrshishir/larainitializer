@@ -28,9 +28,7 @@
                     <?php endforeach; ?>
                 </select>
             </div>
-
-            <button type="submit" class="btn"
-                style="background-color: #7b48cd; color: white; width: 100px; float: right;">Next</button>
+            @include('larainitializer::partials.nextbtn')
         </div>
     </form>
 @endsection
