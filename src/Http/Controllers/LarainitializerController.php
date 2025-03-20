@@ -9,6 +9,11 @@ use Engrshishir\Larainitializer\Helpers\EnvWriter;
 
 class LarainitializerController extends BaseController
 {
+    public function setup()
+    {
+        return redirect()->route('squartup.setup.form',['basic']);
+    } 
+    
     public function create($step)
     {
         switch ($step) {
